@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# User files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Database
+*.db
+
+# VS & OS junk
+.vscode/
+.vs/
+*.DS_Store
+Thumbs.db
