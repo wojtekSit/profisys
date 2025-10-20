@@ -1,0 +1,59 @@
+@model IEnumerable<profisys.Web.Models.Document>
+@{
+    ViewData["Title"] = "Dokumenty";
+}
+<form method="post" asp-action="Import">
+    <input type="text" name="path" placeholder="Ścieżka do folderu z plikami CSV" style="width:400px" />
+    <button type="submit">Importuj</button>
+</form>
+<form method="get" style="margin-bottom:20px;">
+    <label>Type:</label>
+    <input type="text" name="type" value="@Context.Request.Query["type"]" />
+
+    <label>City:</label>
+    <input type="text" name="city" value="@Context.Request.Query["city"]" />
+
+    <label>Last Name:</label>
+    <input type="text" name="lastName" value="@Context.Request.Query["lastName"]" />
+
+    <label>First Name:</label>
+    <input type="text" name="firstName" value="@Context.Request.Query["firstName"]" />
+
+    <label>From:</label>
+    <input type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" />
+
+    <label>To:</label>
+    <input type="date" name="toDate" value="@Context.Request.Query["toDate"]" />
+
+    <button type="submit">Filter</button>
+    <a href="/Documents">Reset</a>
+</form>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.Id</td>
+                <td>@d.Type</td>
+                <td>@d.Date.ToShortDateString()</td>
+                <td>@d.FirstName</td>
+                <td>@d.LastName</td>
+                <td>@d.City</td>
+                <td><a href="/Documents/Details/@d.Id">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

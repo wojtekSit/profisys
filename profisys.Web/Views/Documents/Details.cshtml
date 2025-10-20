@@ -1,0 +1,32 @@
+@model profisys.Web.Models.Document
+
+<h2>Dokument @Model.Id</h2>
+<p>Data: @Model.Date.ToShortDateString()</p>
+<p>Klient: @Model.FirstName @Model.LastName</p>
+<p>Miasto: @Model.City</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID Dokumentu</th>
+            <th>Ordinal</th>
+            <th>Produkt</th>
+            <th>Ilość</th>
+            <th>Cena</th>
+            <th>Podatek</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.Items)
+        {
+            <tr>
+                <td>@i.DocumentId</td>
+                <td>@i.Ordinal</td>
+                <td>@i.Product</td>
+                <td>@i.Quantity</td>
+                <td>@i.Price</td>
+                <td>@i.TaxRate</td>
+            </tr>
+        }
+    </tbody>
+</table>
