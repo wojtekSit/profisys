@@ -1,4 +1,4 @@
-# PROFISYS – Aplikacja rekrutacyjna (.NET 8, ASP.NET Core MVC, EF Core, SQLite)
+# PROFISYS – Aplikacja rekrutacyjna (.NET 9, ASP.NET Core MVC, EF Core, SQLite)
 
 Aplikacja demonstracyjna przygotowana w ramach zadania rekrutacyjnego dla **PROFISYS Sp. z o.o.**  
 Projekt prezentuje pełny cykl pracy z danymi CSV: import, zapis do relacyjnej bazy danych, oraz wizualizację w interfejsie webowym z filtrami i podglądem szczegółów.
@@ -7,7 +7,7 @@ Projekt prezentuje pełny cykl pracy z danymi CSV: import, zapis do relacyjnej b
 
 ## Technologie i architektura
 
-- **.NET 8.0 SDK**
+- **.NET 9.0 SDK**
 - **ASP.NET Core MVC** – warstwa prezentacji i logiki kontrolerów
 - **Entity Framework Core (Code First)** – ORM + migracje
 - **SQLite** – lekka relacyjna baza danych
@@ -37,7 +37,7 @@ wwwroot/
 
 ## Wymagania środowiskowe
 
-- .NET SDK **8.0 lub nowszy**
+- .NET SDK **9.0 lub nowszy**
 - System: Windows / Linux / macOS
 
 ---
