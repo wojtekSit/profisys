@@ -1,59 +1,95 @@
-@model IEnumerable<profisys.Web.Models.Document>
-@{
-    ViewData["Title"] = "Dokumenty";
-}
-<form method="post" asp-action="Import">
-    <input type="text" name="path" placeholder="Ścieżka do folderu z plikami CSV" style="width:400px" />
-    <button type="submit">Importuj</button>
-</form>
-<form method="get" style="margin-bottom:20px;">
-    <label>Type:</label>
-    <input type="text" name="type" value="@Context.Request.Query["type"]" />
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Import CSV</h5>
+            <form asp-action="Import" method="post" enctype="multipart/form-data" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Documents.csv</label>
+                    <input type="file" name="documentsCsv" accept=".csv" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">DocumentItems.csv</label>
+                    <input type="file" name="documentItemsCsv" accept=".csv" class="form-control" required>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">Importuj</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <label>City:</label>
-    <input type="text" name="city" value="@Context.Request.Query["city"]" />
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Filtry</h5>
+            <form method="get" class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">Type</label>
+                    <input type="text" name="type" class="form-control" value="@Context.Request.Query["type"]">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">City</label>
+                    <input type="text" name="city" class="form-control" value="@Context.Request.Query["city"]">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="lastName" class="form-control" value="@Context.Request.Query["lastName"]">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="firstName" class="form-control"
+                        value="@Context.Request.Query["firstName"]">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">From</label>
+                    <input type="date" name="fromDate" class="form-control" value="@Context.Request.Query["fromDate"]">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">To</label>
+                    <input type="date" name="toDate" class="form-control" value="@Context.Request.Query["toDate"]">
+                </div>
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-outline-primary me-2">Filtruj</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <label>Last Name:</label>
-    <input type="text" name="lastName" value="@Context.Request.Query["lastName"]" />
-
-    <label>First Name:</label>
-    <input type="text" name="firstName" value="@Context.Request.Query["firstName"]" />
-
-    <label>From:</label>
-    <input type="date" name="fromDate" value="@Context.Request.Query["fromDate"]" />
-
-    <label>To:</label>
-    <input type="date" name="toDate" value="@Context.Request.Query["toDate"]" />
-
-    <button type="submit">Filter</button>
-    <a href="/Documents">Reset</a>
-</form>
-
-
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var d in Model)
-        {
-            <tr>
-                <td>@d.Id</td>
-                <td>@d.Type</td>
-                <td>@d.Date.ToShortDateString()</td>
-                <td>@d.FirstName</td>
-                <td>@d.LastName</td>
-                <td>@d.City</td>
-                <td><a href="/Documents/Details/@d.Id">Details</a></td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Dokumenty</h5>
+            <a asp-action="Index" asp-route-sort="idAsc" class="btn btn-outline-secondary btn-sm">Sortuj po ID</a>
+            <a asp-action="Index" asp-route-sort="dateDesc" class="btn btn-outline-secondary btn-sm">Sortuj po dacie</a>
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>City</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var doc in Model)
+                    {
+                        <tr>
+                            <td>@doc.Id</td>
+                            <td>@doc.Type</td>
+                            <td>@doc.Date.ToString("dd.MM.yyyy")</td>
+                            <td>@doc.FirstName</td>
+                            <td>@doc.LastName</td>
+                            <td>@doc.City</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@doc.Id"
+                                    class="btn btn-sm btn-outline-primary">Szczegóły</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("profisys.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5af7752c704a683e3371cfd35f824489e87eab20")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+178b6ee9229468d95cb068d074158c5896efae79")]
 [assembly: System.Reflection.AssemblyProductAttribute("profisys.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("profisys.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

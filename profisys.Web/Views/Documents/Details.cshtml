@@ -1,32 +1,40 @@
 @model profisys.Web.Models.Document
 
-<h2>Dokument @Model.Id</h2>
-<p>Data: @Model.Date.ToShortDateString()</p>
-<p>Klient: @Model.FirstName @Model.LastName</p>
-<p>Miasto: @Model.City</p>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title mb-3">Dokument @Model.Id</h3>
+            <p><strong>Data:</strong> @Model.Date.ToString("dd.MM.yyyy")</p>
+            <p><strong>Klient:</strong> @Model.FirstName @Model.LastName</p>
+            <p><strong>Miasto:</strong> @Model.City</p>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID Dokumentu</th>
-            <th>Ordinal</th>
-            <th>Produkt</th>
-            <th>Ilość</th>
-            <th>Cena</th>
-            <th>Podatek</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var i in Model.Items)
-        {
-            <tr>
-                <td>@i.DocumentId</td>
-                <td>@i.Ordinal</td>
-                <td>@i.Product</td>
-                <td>@i.Quantity</td>
-                <td>@i.Price</td>
-                <td>@i.TaxRate</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <h5 class="mt-4 mb-3">Pozycje</h5>
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID Dokumentu</th>
+                        <th>Ordinal</th>
+                        <th>Produkt</th>
+                        <th>Ilość</th>
+                        <th>Cena</th>
+                        <th>Podatek</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.DocumentId</td>
+                            <td>@item.Ordinal</td>
+                            <td>@item.Product</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.TaxRate%</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <a asp-action="Index" class="btn btn-secondary mt-3">Powrót</a>
+        </div>
+    </div>
+</div>

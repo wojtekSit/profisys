@@ -1,32 +1,35 @@
 using profisys.Web.Data;
 using profisys.Web.Models;
+using Microsoft.AspNetCore.Http;
 
 public class CsvImportService
 {
     private readonly ApplicationDbContext _context;
-    public CsvImportService(ApplicationDbContext context) => _context = context;
+    private readonly IWebHostEnvironment _env;
 
-    public void ImportDocuments(string folderPath)
+    public CsvImportService(ApplicationDbContext context, IWebHostEnvironment env)
     {
-        var docPath = Path.Combine(folderPath, "Documents.csv");
-        var lines = File.ReadAllLines(docPath);
-        var docs = new List<Document>();
+        _context = context;
+        _env = env;
+    }
 
-        foreach (var line in lines.Skip(1))
-        {
-            var parts = line.Split(';');
-            if (parts.Length < 6) continue;
+    public void ImportDocuments(IFormFile documentsCsv, IFormFile documentItemsCsv)
+    {
+        var uploadPath = Path.Combine(_env.WebRootPath, "uploads");
+        Directory.CreateDirectory(uploadPath);
 
-            docs.Add(new Document
-            {
-                Id = int.Parse(parts[0]),
-                Type = parts[1],
-                Date = DateTime.Parse(parts[2]),
-                FirstName = parts[3],
-                LastName = parts[4],
-                City = parts[5]
-            });
-        }
+        var docsPath = Path.Combine(uploadPath, "Documents.csv");
+        var itemsPath = Path.Combine(uploadPath, "DocumentItems.csv");
+
+        using (var stream = new FileStream(docsPath, FileMode.Create))
+            documentsCsv.CopyTo(stream);
+
+        using (var stream = new FileStream(itemsPath, FileMode.Create))
+            documentItemsCsv.CopyTo(stream);
+
+        var docs = ParseDocuments(docsPath);
+        var items = ParseItems(itemsPath);
+
         _context.DocumentItems.RemoveRange(_context.DocumentItems);
         _context.Documents.RemoveRange(_context.Documents);
         _context.SaveChanges();
@@ -34,16 +37,40 @@ public class CsvImportService
         _context.Documents.AddRange(docs);
         _context.SaveChanges();
 
-        var itemsPath = Path.Combine(folderPath, "DocumentItems.csv");
-        var itemLines = File.ReadAllLines(itemsPath);
-        var items = new List<DocumentItem>();
+        _context.DocumentItems.AddRange(items);
+        _context.SaveChanges();
 
-        foreach (var line in itemLines.Skip(1))
+        File.Delete(docsPath);
+        File.Delete(itemsPath);
+    }
+
+    private IEnumerable<Document> ParseDocuments(string path)
+    {
+        var lines = File.ReadAllLines(path).Skip(1);
+        foreach (var line in lines)
         {
             var parts = line.Split(';');
             if (parts.Length < 6) continue;
+            yield return new Document
+            {
+                Id = int.Parse(parts[0]),
+                Type = parts[1],
+                Date = DateTime.Parse(parts[2]),
+                FirstName = parts[3],
+                LastName = parts[4],
+                City = parts[5]
+            };
+        }
+    }
 
-            items.Add(new DocumentItem
+    private IEnumerable<DocumentItem> ParseItems(string path)
+    {
+        var lines = File.ReadAllLines(path).Skip(1);
+        foreach (var line in lines)
+        {
+            var parts = line.Split(';');
+            if (parts.Length < 6) continue;
+            yield return new DocumentItem
             {
                 DocumentId = int.Parse(parts[0]),
                 Ordinal = int.Parse(parts[1]),
@@ -51,10 +78,7 @@ public class CsvImportService
                 Quantity = int.Parse(parts[3]),
                 Price = decimal.Parse(parts[4]),
                 TaxRate = decimal.Parse(parts[5])
-            });
+            };
         }
-
-        _context.DocumentItems.AddRange(items);
-        _context.SaveChanges();
     }
 }
