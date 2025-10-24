@@ -59,12 +59,6 @@ wwwroot/
 
    ```
 
-3. **Utwórz lokalną bazę danych z migracji:**
-
-   ```bash
-   dotnet ef database update
-   ```
-
 4. **Uruchom aplikację:**
 
    ```bash
