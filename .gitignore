@@ -19,3 +19,4 @@ obj/
 .vs/
 *.DS_Store
 Thumbs.db
+wwwroot/uploads/
