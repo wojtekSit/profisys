@@ -39,7 +39,6 @@ wwwroot/
 
 - .NET SDK **8.0 lub nowszy**
 - System: Windows / Linux / macOS
-- (Opcjonalnie) PowerShell lub Bash
 
 ---
 
@@ -48,21 +47,29 @@ wwwroot/
 1. **Sklonuj repozytorium:**
 
    ```bash
-   git clone <adres-repozytorium>
+   git clone https://github.com/wojtekSit/profisys.git
    cd profisys.Web
 
    ```
 
 2. **Przywróć zależności:**
+
+   ```bash
    dotnet restore
+
+   ```
 
 3. **Utwórz lokalną bazę danych z migracji:**
 
-dotnet ef database update
+   ```bash
+   dotnet ef database update
+   ```
 
 4. **Uruchom aplikację:**
 
-dotnet run
+   ```bash
+   dotnet run
+   ```
 
 ## Sposób działania
 
