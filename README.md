@@ -1,42 +1,90 @@
-# DotDocs (.NET 8, ASP.NET Core MVC, EF Core, SQLite)
+# PROFISYS – Aplikacja rekrutacyjna (.NET 8, ASP.NET Core MVC, EF Core, SQLite)
 
-## Wymagania
+Aplikacja demonstracyjna przygotowana w ramach zadania rekrutacyjnego dla **PROFISYS Sp. z o.o.**  
+Projekt prezentuje pełny cykl pracy z danymi CSV: import, zapis do relacyjnej bazy danych, oraz wizualizację w interfejsie webowym z filtrami i podglądem szczegółów.
 
-- .NET SDK 8.0
-- (Opcjonalnie) PowerShell / Bash
+---
 
-## Uruchomienie (szybko)
+## Technologie i architektura
 
-1. Sklonuj repo i przejdź do katalogu:
-   git clone <twoje-repo>; cd DotDocs
-2. Umieść pliki CSV w katalogu `data/` (obok solucji).
-3. Start:
-   - Windows: scripts\setup-win.bat
-   - Linux/macOS: bash scripts/setup.sh
-4. Wejdź na https://localhost:5001 (lub http://localhost:5000).
+- **.NET 8.0 SDK**
+- **ASP.NET Core MVC** – warstwa prezentacji i logiki kontrolerów
+- **Entity Framework Core (Code First)** – ORM + migracje
+- **SQLite** – lekka relacyjna baza danych
+- **Bootstrap 5** – stylizacja i układ interfejsu
+- **Dependency Injection** – wstrzykiwanie serwisów (`CsvImportService`)
+- **IFormFile API** – bezpieczny upload plików CSV
 
-## Format CSV
+Architektura opiera się o standardowy wzorzec **MVC + warstwa usług (Service Layer)**:
 
-- Documents.csv: Id,Number,Date,CustomerName,Currency,TotalAmount
-- DocumentItems.csv: Id,DocumentId,LineNo,ProductCode,ProductName,Qty,Unit,UnitPrice,LineTotal
+Controllers/
+└── DocumentsController.cs
+Services/
+└── CsvImportService.cs
+Models/
+├── Document.cs
+└── DocumentItem.cs
+Data/
+└── ApplicationDbContext.cs
+Views/
+└── Documents/
+├── Index.cshtml
+└── Details.cshtml
+wwwroot/
+└── css/site.css
 
-Daty w formacie `yyyy-MM-dd`. Pola kwotowe jako liczby dziesiętne z kropką.
+---
 
-## Funkcje
+## Wymagania środowiskowe
 
-- Import CSV → SQLite (idempotentny: update/insert po Id).
-- Tabela dokumentów z filtrami: Nr, Kontrahent, Data od–do, Kwota min–max, stronicowanie.
-- Podgląd dokumentu z pozycjami.
-- Czyszczenie danych przed importem (opcjonalne).
+- .NET SDK **8.0 lub nowszy**
+- System: Windows / Linux / macOS
+- (Opcjonalnie) PowerShell lub Bash
 
-## Dobre praktyki
+---
 
-- EF Core + migracje, indeksy na kluczowych kolumnach.
-- Walidacja importu + ostrzeżenia.
-- Oddzielenie warstw: Models / Data / Services / MVC.
+## Uruchomienie projektu
 
-## Rozszerzenia (opcjonalnie)
+1. **Sklonuj repozytorium:**
 
-- Eksport do CSV/XLSX.
-- Upsert pozycji po (DocumentId, LineNo).
-- Testy jednostkowe dla CsvImportService.
+   ```bash
+   git clone <adres-repozytorium>
+   cd profisys.Web
+
+   ```
+
+2. **Przywróć zależności:**
+   dotnet restore
+
+3. **Utwórz lokalną bazę danych z migracji:**
+
+dotnet ef database update
+
+4. **Uruchom aplikację:**
+
+dotnet run
+
+## Sposób działania
+
+Użytkownik wchodzi na stronę główną aplikacji (/Documents/Index).
+
+W sekcji Import CSV wybiera dwa pliki:
+Documents.csv i DocumentItems.csv.
+
+Po przesłaniu pliki są zapisywane tymczasowo w katalogu wwwroot/uploads/.
+
+CsvImportService:
+
+czyści dotychczasowe dane w tabelach,
+
+parsuje oba pliki CSV,
+
+wstawia rekordy do tabel Documents i DocumentItems,
+
+usuwa pliki tymczasowe po imporcie.
+
+Dane są następnie prezentowane w tabeli z filtrami (typ, miasto, nazwisko, data) oraz sortowaniem po (id, data).
+
+Po kliknięciu Szczegóły można zobaczyć pozycje danego dokumentu.
+
+Autor: Wojciech Sitko
